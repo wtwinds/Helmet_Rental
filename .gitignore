@@ -6,9 +6,7 @@ __pycache__/
 # Node
 node_modules/
 
-# Static large files
-static/images/
-static/sector_images/
+
 
 # Archives & media
 *.zip
