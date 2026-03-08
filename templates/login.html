@@ -3,7 +3,7 @@
 
 <head>
 
-    <title>Register</title>
+    <title>Login</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -17,45 +17,43 @@
 
     {% include 'navbar.html' %}
 
-    <div class="container">
+    <div class="container" style="padding-top:100px;">
 
         <div class="register-card">
 
-            {% with messages = get_flashed_messages(category_filter=["register_success"]) %}
+            {% with messages = get_flashed_messages(category_filter=["login_error"]) %}
             {% if messages %}
             {% for message in messages %}
-            <div class="alert alert-success text-center">
+            <div class="alert alert-danger text-center">
                 {{ message }}
             </div>
             {% endfor %}
             {% endif %}
             {% endwith %}
 
-            <div class="text-center mb-4">
-                <h3 class="mt-2">User Registration</h3>
-            </div>
+            <h3 class="text-center">Sign in</h3>
 
-            <form action="/submit" method="POST">
+            <p class="text-center text-muted">Welcome back</p>
 
-                <div class="mb-3">
-                    <input type="text" name="name" placeholder="Full Name" class="form-control" required>
-                </div>
+            <form action="/login-user" method="POST">
 
                 <div class="mb-3">
-                    <input type="email" name="email" placeholder="Email Address" class="form-control" required>
-                </div>
-
-                <div class="mb-3">
-                    <input type="text" name="phone" placeholder="Phone Number" class="form-control" required>
+                    <input type="email" name="email" placeholder="Email" class="form-control" required>
                 </div>
 
                 <div class="mb-3">
                     <input type="password" name="password" placeholder="Password" class="form-control" required>
                 </div>
 
-                <button class="btn btn-dark w-100">Register</button>
+                <button class="btn btn-primary w-100">Login</button>
 
             </form>
+
+            <hr>
+
+            <a href="/register" class="btn btn-outline-primary w-100">
+                New Users
+            </a>
 
         </div>
 

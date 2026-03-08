@@ -7,13 +7,13 @@
 
         <div>
 
-            {% if request.path != '/' %}
-            <a href="/" class="btn btn-light btn-sm me-2">
+            {% if request.path != '/login' %}
+            <a href="/login" class="btn btn-light btn-sm me-2">
                 ← Back
             </a>
             {% endif %}
 
-            <a href="/" class="btn btn-danger btn-sm">
+            <a href="/logout" class="btn btn-danger btn-sm">
                 Logout
             </a>
 

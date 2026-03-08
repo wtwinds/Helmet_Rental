@@ -6,7 +6,7 @@ function requestLocation() {
 
             function (position) {
 
-                window.location.href = "/register";
+                window.location.href = "/login";   // changed here
 
             },
 
