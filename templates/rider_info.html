@@ -11,6 +11,7 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
+    <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
 </head>
 
 <body class="bg-light form-page">
@@ -62,11 +63,6 @@
                     </div>
 
                 </div>
-
-                <div class="mb-3">
-                    <input type="text" name="id_number" placeholder="Enter ID Number" class="form-control">
-                </div>
-
                 <div class="mb-3">
                     <label>Upload ID</label>
                     <input type="file" name="id_image" class="form-control" accept=".jpg,.jpeg,.png,.pdf">

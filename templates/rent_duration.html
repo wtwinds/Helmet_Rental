@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Rent Duration</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+</head>
+
+<body class="bg-light form-page">
+
+    {% include 'navbar.html' %}
+
+    <div class="container rent-container">
+
+        <div class="rent-card">
+
+            <h4 class="text-center mb-4">Rent Duration & Verification</h4>
+
+            <form action="/save-rent" method="POST">
+
+                <label class="fw-semibold">Helmet Rent Duration</label>
+                <div class="mb-3">
+                    <label class="form-label">Start Day</label>
+                    <input type="date" name="start_day" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">End Day</label>
+                    <input type="date" name="end_day" class="form-control" required>
+                    <small class="text-muted">(Must align with vehicle rental)</small>
+                </div>
+
+                <div class="text-center mt-3">
+                    <button class="btn btn-dark px-4">Next</button>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+    <script>
+        setTimeout(function () {
+            let alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => alert.style.display = 'none');
+        }, 3000);
+    </script>
+</body>
+
+</html>

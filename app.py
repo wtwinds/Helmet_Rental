@@ -11,6 +11,8 @@ client = MongoClient(MONGO_URI)
 db = client["helmet_rental"]
 users = db["users"]
 riders=db["rider_info"]
+rents = db["rent_duration"]
+feedbacks=db["feedback"]
 
 #upload doc
 UPLOAD_FOLDER = "static/uploads"
@@ -109,11 +111,11 @@ def save_rider():
     fullname = request.form.get("fullname")
     contact = request.form.get("contact")
     id_type = request.form.get("id_type")
-    id_number = request.form.get("id_number")
     hotel_name = request.form.get("hotel_name")
     room_no = request.form.get("room_no")
     helmet_count = request.form.get("helmet_count")
 
+    session["helmet_count"] = int(helmet_count)
     id_file = request.files.get("id_image")
 
     filename = ""
@@ -129,7 +131,6 @@ def save_rider():
         "fullname": fullname,
         "contact": contact,
         "id_type": id_type,
-        "id_number": id_number,
         "hotel_name": hotel_name,
         "room_no": room_no,
         "helmet_count": helmet_count,
@@ -140,7 +141,90 @@ def save_rider():
 
     flash("Welcome to Helmet Rental App", "rider_success")
 
-    return redirect(url_for("rider_info"))
+    return redirect(url_for("rent_duration"))
+
+# rent duration page
+@app.route("/rent-duration")
+def rent_duration():
+
+    if "user_name" not in session:
+        return redirect(url_for("login"))
+
+    return render_template("rent_duration.html")
+
+@app.route("/save-rent", methods=["POST"])
+def save_rent():
+
+    start_day = request.form.get("start_day")
+    end_day = request.form.get("end_day")
+
+    # video_file = request.files.get("helmet_video")
+
+    # video_name = ""
+
+    # if video_file and video_file.filename != "":
+    #     path = os.path.join(app.config["UPLOAD_FOLDER"], video_file.filename)
+    #     video_file.save(path)
+    #     video_name = video_file.filename
+
+    rent_data = {
+        "user_name": session["user_name"],
+        "start_day": start_day,
+        "end_day": end_day,
+        # "helmet_video": video_name
+    }
+
+    rents.insert_one(rent_data)
+
+    flash("Helmet rental verification completed", "success")
+
+    return redirect(url_for("payment"))
+
+#---------Payment--------------------
+@app.route("/payment")
+def payment():
+
+    if "user_name" not in session:
+        return redirect(url_for("login"))
+
+    helmet_count = session.get("helmet_count", 1)
+
+    price_per_helmet = 50
+
+    total_price = helmet_count * price_per_helmet
+
+    return render_template("payment.html",
+                           helmet_count=helmet_count,
+                           total_price=total_price)
+
+# -------- Booking Complete Page --------
+@app.route("/booking-success")
+def booking_success():
+
+    if "user_name" not in session:
+        return redirect(url_for("login"))
+
+    return render_template("booking_success.html")
+
+#-----Feedback Save----------
+@app.route("/save-feedback", methods=["POST"])
+def save_feedback():
+
+    rating = request.form.get("rating")
+    comment = request.form.get("comment")
+
+    feedback_data = {
+
+        "user_name": session["user_name"],
+        "rating": rating,
+        "comment": comment
+    }
+
+    feedbacks.insert_one(feedback_data)
+
+    flash("Thanks for your feedback!", "success")
+
+    return redirect(url_for("home"))
 
 # Logout
 @app.route("/logout")
