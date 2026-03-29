@@ -113,9 +113,26 @@ def save_rider():
     id_type = request.form.get("id_type")
     hotel_name = request.form.get("hotel_name")
     room_no = request.form.get("room_no")
-    helmet_count = request.form.get("helmet_count")
 
-    session["helmet_count"] = int(helmet_count)
+    normal_helmet = int(request.form.get("normal_helmet",0))
+    bluetooth_helmet=int(request.form.get("bluetooth_helmet",0))
+    hud_helmet=int(request.form.get("hud_helmet",0))
+    
+    damage_protection=request.form.get("damage_protection")
+
+    total_helmets=normal_helmet+bluetooth_helmet+hud_helmet
+    if total_helmets>3:
+        flash("Maximum 3 helmets allowed","error")
+        return redirect(url_for("rider_info"))
+    session["normal_helmet"] = int(normal_helmet)
+    session["bluetooth_helmet"]=bluetooth_helmet
+    session["hud_helmet"]=hud_helmet
+
+    if damage_protection=="yes":
+        session["damage_protection"]=100
+    else:
+        session["damage_protection"]=0
+
     id_file = request.files.get("id_image")
 
     filename = ""
@@ -133,7 +150,9 @@ def save_rider():
         "id_type": id_type,
         "hotel_name": hotel_name,
         "room_no": room_no,
-        "helmet_count": helmet_count,
+        "normal_helmet": normal_helmet,
+        "bluetooth_helmet": bluetooth_helmet,
+        "hud_helmet": hud_helmet,
         "document_file": filename
     }
 
@@ -187,14 +206,25 @@ def payment():
     if "user_name" not in session:
         return redirect(url_for("login"))
 
-    helmet_count = session.get("helmet_count", 1)
+    normal=session.get("normal_helmet",0)
+    bluetooth=session.get("bluetooth_helmet",0)
+    hud=session.get("hud_helmet",0)
+    damage=session.get("damage_protection",0)
 
-    price_per_helmet = 50
+    normal_price=50
+    bluetooth_price=200
+    hud_price=300
 
-    total_price = helmet_count * price_per_helmet
+    total_price = (normal*normal_price) + \
+                (bluetooth*bluetooth_price)+ \
+                (hud*hud_price)+\
+                damage
 
     return render_template("payment.html",
-                           helmet_count=helmet_count,
+                           normal=normal,
+                           bluetooth=bluetooth,
+                           hud=hud,
+                           damage=damage,
                            total_price=total_price)
 
 # -------- Booking Complete Page --------

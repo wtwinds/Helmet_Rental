@@ -76,15 +76,57 @@
                     <input type="text" name="room_no" placeholder="Enter Room No" class="form-control">
                 </div>
 
+                <!-- NORMAL HELMET -->
                 <div class="mb-3">
-                    <select name="helmet_count" class="form-select">
-
-                        <option value="">No of Helmet</option>
+                    <label>No of Normal Helmet (₹50 each)</label>
+                    <select name="normal_helmet" class="form-select">
+                        <option value="0">0</option>
                         <option>1</option>
                         <option>2</option>
                         <option>3</option>
-
                     </select>
+                </div>
+
+                <!-- SMART HELMET FILTER -->
+                <div class="mb-3">
+                    <label class="fw-bold">Smart Helmet Filter</label>
+
+                    <!-- Bluetooth -->
+                    <div class="mt-2">
+                        <label>Bluetooth Helmet (₹200 each)</label>
+                        <select name="bluetooth_helmet" class="form-select">
+                            <option value="0">0</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                        </select>
+                    </div>
+
+                    <!-- HUD -->
+                    <div class="mt-2">
+                        <label>HUD / Dashcam Helmet (₹300 each)</label>
+                        <select name="hud_helmet" class="form-select">
+                            <option value="0">0</option>
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="fw-bold">Protection Add-on</label>
+
+                    <div class="form-check mt-2">
+                        <input class="form-check-input" type="checkbox" name="damage_protection" value="yes">
+                        <label class="form-check-label">
+                            Damage Protection Waiver (₹100 one-time)
+                            <br>
+                            <small class="text-muted">
+                                Covers accidental scratches & minor damages
+                            </small>
+                        </label>
+                    </div>
                 </div>
 
                 <div class="text-center">
@@ -103,6 +145,8 @@
             alerts.forEach(alert => alert.style.display = 'none');
         }, 3000);
     </script>
+
+    <script src="{{ url_for('static', filename='js/helmet-limit.js') }}"></script>
 </body>
 
 </html>

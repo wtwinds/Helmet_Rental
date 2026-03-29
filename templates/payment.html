@@ -27,14 +27,15 @@
 
             <div class="mb-3">
 
-                <p class="fs-5">
-                    Helmets Selected : <b>{{ helmet_count }}</b>
-                </p>
+                <p>Normal Helmet : <b>{{ normal }}</b> × ₹50</p>
 
-                <p class="fs-5">
-                    Price Per Helmet : <b>₹50</b>
-                </p>
+                <p>Bluetooth Helmet : <b>{{ bluetooth }}</b> × ₹200</p>
 
+                <p>HUD / Dashcam Helmet : <b>{{ hud }}</b> × ₹300</p>
+
+                {% if session.get('damage_protection',0) > 0 %}
+                <p>Damage Protection : <b>₹100</b></p>
+                {% endif %}
             </div>
 
             <hr>
