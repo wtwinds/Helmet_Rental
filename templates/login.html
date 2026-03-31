@@ -32,6 +32,16 @@
             {% endif %}
             {% endwith %}
 
+            {% with messages = get_flashed_messages(category_filter=["success"]) %}
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-success text-center">
+                {{ message }}
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
             <h3 class="text-center">Sign in</h3>
 
             <p class="text-center text-muted">Welcome back</p>
@@ -51,6 +61,12 @@
             </form>
 
             <hr>
+
+            <div class="text-center mt-3">
+                <a href="/forgot-password" class="text-decoration-none">
+                    Forgot Password
+                </a>
+            </div>
 
             <a href="/register" class="btn btn-outline-primary w-100">
                 New Users

@@ -54,6 +54,19 @@
                     <input type="password" name="password" placeholder="Password" class="form-control" required>
                 </div>
 
+                <div class="mb-3">
+                    <label>Security Question</label>
+                    <select name="security_question" class="form-select" required>
+                        <option value="">Select Question</option>
+                        <option value="pet">What is your pet name?</option>
+                        <option value="school">Your school name?</option>
+                        <option value="city">Your birth city?</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <input type="text" name="security_answer" placeholder="Your Answer" class="form-control" required>
+                </div>
+
                 <button class="btn btn-dark w-100">Register</button>
 
             </form>

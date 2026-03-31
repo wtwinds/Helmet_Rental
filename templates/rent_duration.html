@@ -17,6 +17,16 @@
 
     {% include 'navbar.html' %}
 
+    {% with messages = get_flashed_messages(category_filter=["error"]) %}
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-danger text-center">
+        {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+
     <div class="container rent-container">
 
         <div class="rent-card">
@@ -28,12 +38,12 @@
                 <label class="fw-semibold">Helmet Rent Duration</label>
                 <div class="mb-3">
                     <label class="form-label">Start Day</label>
-                    <input type="date" name="start_day" class="form-control" required>
+                    <input type="date" name="start_day" id="start_day" class="form-control" required readonly>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">End Day</label>
-                    <input type="date" name="end_day" class="form-control" required>
+                    <input type="date" name="end_day" id="end_day" class="form-control" required>
                     <small class="text-muted">(Must align with vehicle rental)</small>
                 </div>
 
@@ -52,6 +62,8 @@
             alerts.forEach(alert => alert.style.display = 'none');
         }, 3000);
     </script>
+
+    <script src="{{url_for('static', filename='js/rent-date.js')}}"></script>
 </body>
 
 </html>

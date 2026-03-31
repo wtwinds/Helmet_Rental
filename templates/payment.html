@@ -27,11 +27,17 @@
 
             <div class="mb-3">
 
+                {% if normal > 0 %}
                 <p>Normal Helmet : <b>{{ normal }}</b> × ₹50</p>
+                {% endif %}
 
+                {% if bluetooth > 0 %}
                 <p>Bluetooth Helmet : <b>{{ bluetooth }}</b> × ₹200</p>
+                {% endif %}
 
+                {% if hud > 0 %}
                 <p>HUD / Dashcam Helmet : <b>{{ hud }}</b> × ₹300</p>
+                {% endif %}
 
                 {% if session.get('damage_protection',0) > 0 %}
                 <p>Damage Protection : <b>₹100</b></p>
