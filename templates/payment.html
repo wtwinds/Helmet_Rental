@@ -2,17 +2,12 @@
 <html>
 
 <head>
-
     <title>Payment</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-
-    <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
-
 </head>
 
 <body class="bg-light form-page">
@@ -21,43 +16,63 @@
 
     <div class="container payment-container">
 
-        <div class="payment-card">
+        <div class="payment-card shadow p-4 rounded">
 
-            <h4 class="mb-4">Payment Summary</h4>
+            <h4 class="mb-4 text-center">Payment Summary</h4>
+
+            <!-- 🔥 DAYS -->
+            <div class="mb-3 text-center">
+                <p class="fw-bold">Total Days: {{ days }}</p>
+            </div>
 
             <div class="mb-3">
 
                 {% if normal > 0 %}
-                <p>Normal Helmet : <b>{{ normal }}</b> × ₹50</p>
+                <p>
+                    Normal Helmet :
+                    <b>{{ normal }}</b> × ₹50 × {{ days }} days
+                    = ₹{{ normal * 50 * days }}
+                </p>
                 {% endif %}
 
                 {% if bluetooth > 0 %}
-                <p>Bluetooth Helmet : <b>{{ bluetooth }}</b> × ₹200</p>
+                <p>
+                    Bluetooth Helmet :
+                    <b>{{ bluetooth }}</b> × ₹200 × {{ days }} days
+                    = ₹{{ bluetooth * 200 * days }}
+                </p>
                 {% endif %}
 
                 {% if hud > 0 %}
-                <p>HUD / Dashcam Helmet : <b>{{ hud }}</b> × ₹300</p>
+                <p>
+                    HUD Helmet :
+                    <b>{{ hud }}</b> × ₹300 × {{ days }} days
+                    = ₹{{ hud * 300 * days }}
+                </p>
                 {% endif %}
 
-                {% if session.get('damage_protection',0) > 0 %}
-                <p>Damage Protection : <b>₹100</b></p>
+                {% if damage > 0 %}
+                <p>
+                    Damage Protection :
+                    <b>₹{{ damage }}</b>
+                </p>
                 {% endif %}
+
             </div>
 
             <hr>
 
-            <h3 class="mb-4">
+            <!-- TOTAL -->
+            <h3 class="mb-4 text-center text-success">
                 Total Amount : ₹{{ total_price }}
             </h3>
 
             <div class="text-center">
-
                 <form action="/booking-success">
                     <button class="btn btn-dark px-4">
                         Confirm Payment
                     </button>
                 </form>
-
             </div>
 
         </div>

@@ -125,20 +125,22 @@ def save_rider():
     
     damage_protection=request.form.get("damage_protection")
 
-    total_helmets=normal_helmet+bluetooth_helmet+hud_helmet
-
-    if normal_helmet==0:
-        flash("At least 1 Normal Helmet is required", "error")
+    if normal_helmet==0 and bluetooth_helmet==0 and hud_helmet==0:
+        flash("Please select at least one helmet", "error")
         return redirect(url_for("rider_info"))
     
-    total_helmets=normal_helmet+bluetooth_helmet+hud_helmet
+    #total_helmets=normal_helmet+bluetooth_helmet+hud_helmet
 
-    if total_helmets>3:
-        flash("Maximum 3 helmets allowed","error")
+    if normal_helmet>0 and (bluetooth_helmet>0 or hud_helmet>0):
+        flash("Select either Normal or Smart helmets only","error")
         return redirect(url_for("rider_info"))
     
-    if normal_helmet==3 and (bluetooth_helmet>0 or hud_helmet>0):
-        flash("Smart helmets not allowed when 3 normal helmet selected", "error")
+    if normal_helmet>2:
+        flash("Maximum 2 Normal helmets allowed", "error")
+        return redirect(url_for("rider_info"))
+    
+    if(bluetooth_helmet+hud_helmet)>2:
+        flash("Maximum 2 Smart helmets allowed","error")
         return redirect(url_for("rider_info"))
     
     session["normal_helmet"] = int(normal_helmet)
@@ -199,12 +201,17 @@ def save_rent():
 
     today=datetime.today().date()
 
-    if start_day.date() != today:
-        flash("Start date must be today", "error")
+    if end_day<start_day:
+        flash("End date cannot be before Start date","error")
         return redirect(url_for("rent_duration"))
     
     if end_day.date() < today:
         flash("End date cannot be before today", "error")
+        return redirect(url_for("rent_duration"))
+    
+    # ❌ start date past me nahi hona chahiye
+    if start_day.date() < today:
+        flash("Start date cannot be in past", "error")
         return redirect(url_for("rent_duration"))
     
     rent_data = {
@@ -235,16 +242,27 @@ def payment():
     bluetooth_price=200
     hud_price=300
 
-    total_price = (normal*normal_price) + \
+    # fetch rent data
+    rent = rents.find_one({"user_name": session["user_name"]}, sort=[("_id", -1)])
+
+    start_day = rent["start_day"]
+    end_day = rent["end_day"]
+
+    # calculate days
+    days = (end_day - start_day).days + 1
+
+    total_price = (
+        (normal*normal_price) + \
                 (bluetooth*bluetooth_price)+ \
-                (hud*hud_price)+\
-                damage
+                (hud*hud_price)
+    ) * days+damage
 
     return render_template("payment.html",
                            normal=normal,
                            bluetooth=bluetooth,
                            hud=hud,
                            damage=damage,
+                           days=days,
                            total_price=total_price,
                            back_url="/rent-duration")
 
