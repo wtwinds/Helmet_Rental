@@ -7,29 +7,33 @@ function checkSelection(e) {
     const b = parseInt(bluetooth.value) || 0;
     const h = parseInt(hud.value) || 0;
 
-    //Normal selected → disable smart
-    if (n > 0) {
+    normal.disabled = false;
+    bluetooth.disabled = false;
+    hud.disabled = false;
+
+    //case1-any helmet 2 -> other disable
+    if (n == 2) {
         bluetooth.value = "";
         hud.value = "";
         bluetooth.disabled = true;
         hud.disabled = true;
-    } else {
-        bluetooth.disabled = false;
-        hud.disabled = false;
     }
-
-    // Smart selected → disable normal
-    if (b > 0 || h > 0) {
+    if (b == 2) {
         normal.value = "";
+        hud.value = "";
         normal.disabled = true;
-    } else {
-        normal.disabled = false;
+        hud.disabled = true;
+    }
+    if (h == 2) {
+        normal.value = "";
+        bluetooth.value = "";
+        normal.disabled = true;
+        bluetooth.disabled = true;
     }
 
     // Smart helmet total > 2 not allowed
-    if ((b + h) > 2) {
+    if ((b + h + n) > 2) {
         alert("Maximum 2 smart helmets allowed");
-
         // reset last changed field
         e.target.value = "";
     }

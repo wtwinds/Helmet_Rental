@@ -107,7 +107,7 @@ def rider_info():
     if "user_name" not in session:
         return redirect(url_for("login"))
 
-    return render_template("rider_info.html", back_url="/shop")
+    return render_template("rider_info.html",data=session, back_url="/shop")
 
 #save rider info
 @app.route("/save-rider", methods=["POST"])
@@ -119,9 +119,9 @@ def save_rider():
     hotel_name = request.form.get("hotel_name")
     room_no = request.form.get("room_no")
 
-    normal_helmet = int(request.form.get("normal_helmet",0))
-    bluetooth_helmet=int(request.form.get("bluetooth_helmet",0))
-    hud_helmet=int(request.form.get("hud_helmet",0))
+    normal_helmet = int(request.form.get("normal_helmet") or 0)
+    bluetooth_helmet=int(request.form.get("bluetooth_helmet") or 0)
+    hud_helmet=int(request.form.get("hud_helmet") or 0)
     
     damage_protection=request.form.get("damage_protection")
 
@@ -129,23 +129,31 @@ def save_rider():
         flash("Please select at least one helmet", "error")
         return redirect(url_for("rider_info"))
     
-    #total_helmets=normal_helmet+bluetooth_helmet+hud_helmet
+    if normal_helmet==2 and (bluetooth_helmet>0 or hud_helmet>0):
+        flash("Cannot select others when Normal=2", "error")
+        return redirect(url_for("rider_info"))
 
-    if normal_helmet>0 and (bluetooth_helmet>0 or hud_helmet>0):
-        flash("Select either Normal or Smart helmets only","error")
+    if bluetooth_helmet==2 and (normal_helmet>0 or hud_helmet>0):
+        flash("Cannot select others when bluetooth =2","error")
         return redirect(url_for("rider_info"))
     
-    if normal_helmet>2:
-        flash("Maximum 2 Normal helmets allowed", "error")
+    if hud_helmet==2 and (bluetooth_helmet>0 or normal_helmet>0):
+        flash("Cannot select others when HUD=2","error")
         return redirect(url_for("rider_info"))
     
-    if(bluetooth_helmet+hud_helmet)>2:
-        flash("Maximum 2 Smart helmets allowed","error")
+    if (bluetooth_helmet+hud_helmet+normal_helmet)>2:
+        flash("Maximum 2 smart helmet allowed", "error")
         return redirect(url_for("rider_info"))
-    
+
     session["normal_helmet"] = int(normal_helmet)
     session["bluetooth_helmet"]=bluetooth_helmet
     session["hud_helmet"]=hud_helmet
+
+    session["fullname"]=fullname
+    session["contact"]=contact
+    session["hotel_name"]=hotel_name
+    session["room_no"]=room_no
+    session["id_type"]=id_type
 
     if damage_protection=="yes":
         session["damage_protection"]=100
