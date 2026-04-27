@@ -6,7 +6,8 @@ __pycache__/
 # Node
 node_modules/
 
-
+# Environment variables
+.env
 
 # Archives & media
 *.zip
